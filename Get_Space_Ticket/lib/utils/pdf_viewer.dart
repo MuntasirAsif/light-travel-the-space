@@ -16,6 +16,7 @@ class _PdfViewState extends State<PdfView> {
     document = await PDFDocument.fromURL(widget.pdfUrl);
     setState(() {});
   }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -28,8 +29,8 @@ class _PdfViewState extends State<PdfView> {
       body: document != null
           ? PDFViewer(document: document!)
           : const Center(
-        child: CircularProgressIndicator(),
-      ),
+              child: CircularProgressIndicator(),
+            ),
     );
   }
 }

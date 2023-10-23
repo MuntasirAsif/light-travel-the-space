@@ -29,7 +29,7 @@ class _SearchScreenState extends State<SearchScreen> {
       .ref("post");
   @override
   Widget build(BuildContext context) {
-
+    final height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
         backgroundColor: Styles.bgColor,
@@ -42,7 +42,7 @@ class _SearchScreenState extends State<SearchScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
+                Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: SizedBox(
                     width: 300.0,
@@ -169,42 +169,57 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: 200,
-                  child: Expanded(
-                    child: StreamBuilder(
-                      stream: ref.onValue, builder: (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot) {
-                      if(!snapshot.hasData){
+                  height: height * 0.25,
+                  child: StreamBuilder(
+                    stream: ref.onValue,
+                    builder: (BuildContext context,
+                        AsyncSnapshot<DatabaseEvent> snapshot) {
+                      if (!snapshot.hasData) {
                         return const Center(child: CircularProgressIndicator());
-                      }
-                      else{
-                        Map<dynamic, dynamic>? map = snapshot.data?.snapshot.value as dynamic;
-                        List<dynamic>? list =[];
+                      } else {
+                        Map<dynamic, dynamic>? map =
+                        snapshot.data?.snapshot.value as dynamic;
+                        List<dynamic>? list = [];
                         list.clear();
-                        list =map?.values.toList();
-                        return ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount : 3,
-                            itemBuilder: (context, index){
-                              return  SingleChildScrollView(
-                                  child: InkWell(
-                                    child: TicketView(
-                                      photo: list?[index]['image'],
-                                      formAdd: list?[index]['fromAdd'],
-                                      toAdd: list?[index]['toAdd'],
-                                      space: list?[index]['spaceName'],
-                                      price: list?[index]['price'],
-                                      launceDate:
-                                      list?[index]['lunchingDate'],
-                                    ),
-                                    onTap: () {
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=> BuyTicketScreen(launchingID: list?[index]['lunchCode'])));
-                                    },
-                                  ));
-                            });
+                        list = map?.values.toList();
+                        return SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: List.generate(3, (index) {
+                              if (list != null && list.length > index) {
+                                return InkWell(
+                                  child: TicketView(
+                                    photo: list[index]['image'] ??
+                                        'N/A', // Use the null-aware operator
+                                    formAdd: list[index]['fromAdd'] ?? 'N/A',
+                                    toAdd: list[index]['toAdd'] ?? 'N/A',
+                                    space: list[index]['spaceName'] ?? 'N/A',
+                                    price: list[index]['price'] ?? 'N/A',
+                                    launceDate:
+                                    list[index]['launchingDate'] ?? 'N/A',
+                                  ),
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => BuyTicketScreen(
+                                          launchingID: list?[index]
+                                          ['lunchCode'],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              } else {
+                                return const SizedBox(); // Return an empty widget if data is null
+                              }
+                            }),
+                          ),
+                        );
                       }
                     },
-                    ),
-                  ),),
+                  ),
+                ),
                 const Gap(20),
               ],
             ),

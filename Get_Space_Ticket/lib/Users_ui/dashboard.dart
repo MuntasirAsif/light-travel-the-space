@@ -5,16 +5,28 @@ import 'package:pie_chart/pie_chart.dart';
 
 class Dashboard extends StatelessWidget {
   final double status;
-  Dashboard({Key? key, required this.status, }) : super(key: key);
-    final dataMap = <String, double>{
-      "Status: Good": 85,
-    };
-
+  final String age;
+  final String wight;
+  final String height;
+  Dashboard({Key? key, required this.status, required this.age, required this.wight, required this.height, }) : super(key: key);
   final colorList = <Color>[
     Colors.green.shade400,
   ];
   @override
   Widget build(BuildContext context) {
+    String sign;
+    if(status>90){
+      sign = 'Perfect';
+    }else if(status>80){
+      sign = 'Good';
+    }else if(status>70){
+      sign = 'Not bad';
+    }else{
+      sign = 'Bad';
+    }
+    final dataMap = <String, double>{
+      "Status: $sign": status,
+    };
     return Scaffold(
       backgroundColor: Styles.bgColor,
       body: Padding(
@@ -38,8 +50,26 @@ class Dashboard extends StatelessWidget {
               ),
             ),
             const Gap(30),
+            Text(
+              'Your Age: $age',
+              style: const TextStyle(
+                fontSize: 17,
+                color: Colors.black,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            const Gap(5),
+            Text(
+              'Wight: $wight Kg',
+              style: const TextStyle(
+                fontSize: 17,
+                color: Colors.black,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            const Gap(5),
             const Text(
-              'Your Age: 20',
+              'Physcial Condition: N/A',
               style: TextStyle(
                 fontSize: 17,
                 color: Colors.black,
@@ -48,42 +78,13 @@ class Dashboard extends StatelessWidget {
             ),
             const Gap(5),
             const Text(
-              'Wight: 70 Kg',
+              'Medical Repot: N/A',
               style: TextStyle(
                 fontSize: 17,
                 color: Colors.black,
                 fontWeight: FontWeight.w500,
               ),
             ),
-            const Gap(5),
-            const Text(
-              'Physcial Condition: Good',
-              style: TextStyle(
-                fontSize: 17,
-                color: Colors.black,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const Gap(5),
-            const Text(
-              'Medical Repot: Perfect',
-              style: TextStyle(
-                fontSize: 17,
-                color: Colors.black,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const Gap(20),
-            const Center(
-              child: Text(
-                'You Can Travel 😊',
-                style: TextStyle(
-                  fontSize: 17,
-                  color: Colors.green,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            )
           ],
         ),
       ),

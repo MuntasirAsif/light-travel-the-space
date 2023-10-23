@@ -11,6 +11,7 @@ import 'package:get_space_ticket/login_signup/ui/auth/login_screen.dart';
 import 'package:get_space_ticket/utils/app_styles.dart';
 import 'package:image_picker/image_picker.dart';
 import '../login_signup/ui/utils/utils.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -185,12 +186,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                   child: const Text('Health Report'),
                                   onPressed: () {
+                                    double status;
+                                    status = calculateBMI(map['height'] ?? '0',
+                                        map['wight'] ?? '0', age);
                                     showModalBottomSheet(
                                         context: context,
                                         builder: (BuildContext context) {
                                           return SizedBox(
                                             height: 500,
-                                            child: Dashboard(status: 85,),
+                                            child: Dashboard(
+                                              status: status,
+                                              age: age.toString(),
+                                              wight: map['wight'],
+                                              height: map['height'],
+                                            ),
                                           );
                                         });
                                   },
@@ -379,7 +388,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     ),
                                     const Gap(10),
                                     Text(map['presentAddress'] ?? 'N/A'),
-                                    Gap(20),
+                                    const Gap(20),
                                     SizedBox(
                                       width: MediaQuery.of(context).size.width,
                                       child: SizedBox(
@@ -390,33 +399,55 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           child: ElevatedButton(
                                             style: ButtonStyle(
                                               backgroundColor:
-                                              MaterialStateProperty.all(const Color(
-                                                  0xff014807)),
+                                                  MaterialStateProperty.all(
+                                                      const Color(0xff014807)),
                                             ),
-                                            child: const Text('Apply for Training'),
+                                            child: const Text(
+                                                'Apply for Training'),
                                             onPressed: () {
-                                              Utils().toastMessages('Apply Successful');
+                                              Utils().toastMessages(
+                                                  'Apply Successful');
                                               showModalBottomSheet(
                                                   context: context,
-                                                  builder: (BuildContext context) {
+                                                  builder:
+                                                      (BuildContext context) {
                                                     return const SizedBox(
                                                       height: 500,
                                                       child: Column(
-                                                        mainAxisAlignment: MainAxisAlignment.center,
-                                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
                                                         children: [
-                                                          Icon(Icons.mark_email_read,color: Colors.green,size: 50,),
-                                                          Text('Apply Successful',style: TextStyle(
+                                                          Icon(
+                                                            Icons
+                                                                .mark_email_read,
                                                             color: Colors.green,
-                                                            fontSize: 30
-                                                          ),),
+                                                            size: 50,
+                                                          ),
+                                                          Text(
+                                                            'Apply Successful',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .green,
+                                                                fontSize: 30),
+                                                          ),
                                                           Gap(10),
-                                                          Text('We will contact with you',style: TextStyle(
-                                                              color: Colors.black87,
-                                                              fontSize: 20)),
-                                                          Text('for Training',style: TextStyle(
-                                                              color: Colors.black87,
-                                                              fontSize: 20)),
+                                                          Text(
+                                                              'We will contact with you',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .black87,
+                                                                  fontSize:
+                                                                      20)),
+                                                          Text('for Training',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .black87,
+                                                                  fontSize:
+                                                                      20)),
                                                         ],
                                                       ),
                                                     );
@@ -425,7 +456,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           ),
                                         ),
                                       ),
-                                    )
+                                    ),
+
                                   ],
                                 ),
                                 const Gap(10),
@@ -474,7 +506,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ),
                           ),
-                        )
+                        ),
                       ],
                     );
                   } else {
@@ -485,6 +517,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
     );
+  }
+
+  double calculateBMI(String height, String wight, int age) {
+    double height2 = double.parse(height) * 30.48;
+    double weight2 = double.parse(wight);
+    double point;
+    if (age >= 20 && age <= 25) {
+      point = 8;
+    } else if (age >= 26 && age <= 35) {
+      point = 10;
+    } else if (age >= 36 && age <= 40) {
+      point = 8;
+    } else {
+      point = 5;
+    }
+    height2 = height2 / 100;
+    double heightSquare = height2 * height2;
+    double result = weight2 / heightSquare;
+    print(result);
+    if (result < 14.5) {
+      result = 12.0;
+    } else if (result > 27.9) {
+      result = 11.0;
+    }
+    result = result + point;
+    result = result * 2.5;
+    print(point);
+    print(result);
+    return result;
   }
 
   uploadPic(File image) async {

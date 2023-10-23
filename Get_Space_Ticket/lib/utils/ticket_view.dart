@@ -28,9 +28,11 @@ class TicketView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = AppLayout.getSize(context);
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return SizedBox(
-      width: size.width * .90,
-      height: 200,
+      width: width*0.9,
+      height: height*0.26,
       child: Container(
         margin: const EdgeInsets.only(left: 16),
         child: Column(
@@ -46,8 +48,8 @@ class TicketView extends StatelessWidget {
                   Row(
                     children: [
                       Container(
-                        height: 70,
-                        width: 330,
+                        height: height*.08,
+                        width: width*0.84,
                         decoration: BoxDecoration(
                           borderRadius: const BorderRadius.only(
                             topRight: Radius.circular(40),
@@ -65,8 +67,8 @@ class TicketView extends StatelessWidget {
               ),
             ),
             Container(
-              height: 15,
-              width: 330,
+              height: height*.02,
+              width: width*0.84,
               color: Colors.black87,
               child: Row(
                 children: [
@@ -116,8 +118,8 @@ class TicketView extends StatelessWidget {
               ),
             ),
             Container(
-              height: 98,
-              width: 330,
+              height: height*.12,
+              width: width*0.84,
               decoration: const BoxDecoration(
                 color: Colors.black,
                 borderRadius: BorderRadius.only(
